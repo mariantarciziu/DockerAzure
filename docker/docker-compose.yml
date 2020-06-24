@@ -1,0 +1,30 @@
+version: "3.6"
+
+services:
+    web_api:
+        image: tarciziu/netcore:latest
+        #build: ../.    takes the image from the Docker file instead of image above
+        ports:
+            - "8000:80"
+        networks:
+            TestNetwork:
+        depends_on: 
+            - sql_db
+    sql_db:
+        image: "mcr.microsoft.com/mssql/server:2019-latest"
+        environment:            
+            SA_PASSWORD: "SecurePass123"
+            ACCEPT_EULA: "Y" # - ACCEPT_EULA=Y both accepted
+            MSSQL_PID: "Express"
+        ports:
+            - 1433:1433
+        volumes:
+            - TestVolume:/var/opt/mssql
+        networks:
+            TestNetwork:
+
+networks:
+    TestNetwork:
+
+volumes:
+    TestVolume:
